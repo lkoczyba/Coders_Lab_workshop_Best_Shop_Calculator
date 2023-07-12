@@ -1,0 +1,186 @@
+//variables
+$color-primary: #08A6E4;
+$color-secondary: #FB3B64;
+$color-tertiary: #55DFB4;
+$color-text: #000000;
+$color-neutral: #A5A5A5;
+$color-neutral-light: #F7F7F7;
+$color-neutral-lightest: #FFFFFF;
+
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+
+.calc {
+  padding: 80px 0;
+  background-color: $color-neutral-light;
+
+  @include tablet {
+    padding: 30px 15px;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  &__columns {
+    max-width: 865px;
+    margin: 50px auto 0;
+    display: flex;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__form {
+    width: 50%;
+    margin-right: 20px;
+
+    @include tablet {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+
+  &__input input,
+  &__select .select__input {
+    color: $color-neutral;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid $color-primary;
+    padding: 11px 20px;
+    line-height: 1em;
+    font-size: 0.8125rem;
+    box-shadow: 0px 3px 6px $color-neutral;
+    margin-bottom: 20px;
+    background-color: $color-neutral-lightest;
+  }
+
+  &__input {
+    input {
+      &::placeholder {
+        color: $color-neutral;
+      }
+    }
+  }
+
+  &__select {
+    position: relative;
+
+    .select__input {
+      position: relative;
+      height: 40px;
+      vertical-align: middle;
+      padding: 13px 20px;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        background-image: url("./assets/Arrow.svg");
+        width: 22px;
+        height: 22px;
+        display: block;
+        position: absolute;
+        right: 14px;
+        top: 9px;
+      }
+    }
+
+    .select__dropdown {
+      display: none;
+      position: absolute;
+      z-index: 1;
+      background-color: white;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid $color-secondary;
+      overflow: hidden;
+
+      li {
+        font-size: 13px;
+        padding: 10px 20px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $color-neutral-light;
+        }
+      }
+    }
+
+
+    &.open {
+      .select__input::after {
+        transform: rotate(180deg);
+      }
+
+      .select__dropdown {
+        display: block;
+      }
+    }
+  }
+
+  .form__checkbox {
+    .consent__text {
+      padding-top: 4px;
+    }
+  }
+
+  &__summary {
+    width: 50%;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+
+    @include tablet {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 30px;
+    }
+
+    .summary__total,
+    .list__item {
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, .16);
+      border-radius: 6px;
+      justify-content: space-between;
+      align-items: center;
+      color: $color-neutral-lightest;
+      font-size: 0.875rem;
+      display: none;
+
+      &.open {
+        display: flex;
+      }
+    }
+
+    .summary__total {
+      width: 50%;
+      align-self: flex-end;
+      margin-top: 22px;
+      padding: 8px 20px;
+      background-color: $color-primary;
+
+      .total__price {
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+    }
+
+    .list__item {
+      padding: 6px 20px;
+      background-color: $color-tertiary;
+      margin-bottom: 8px;
+
+      .item {
+        &__price {
+          font-weight: 700;
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
+}
