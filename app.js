@@ -5,7 +5,7 @@ const form = {
     package: document.getElementById('package'),
     accounting: document.getElementById('accounting'),
     terminal: document.getElementById('terminal')
-}
+};
 
 //summary elements
 const summary = {
@@ -15,7 +15,7 @@ const summary = {
     accounting: document.querySelector('[data-id=accounting]'),
     terminal: document.querySelector('[data-id=terminal]'),
     totalPrice: document.querySelector('[data-id=total-price]')
-}
+};
 
 const prices ={
     products: 0.5,
@@ -27,17 +27,33 @@ const prices ={
     },
     accounting: 35,
     terminal: 5
+};
+
+let prices_calculated={
+    products: 0,
+    orders: 0,
+    package:0,
+    accounting: 0,
+    terminal: 0
 }
 form.package.addEventListener('click', function (e) {
     this.classList.toggle('open');
 });
 
-form.products.addEventListener('input', function () {
-    if (this.value > 0) {
-        summary.products.classList.add('open');
-    }else{
-        summary.products.classList.remove('open');
-    }
-    summary.products.children[1].textContent=`${this.value} * $${prices.products}`;
-    summary.products.children[2].textContent=`$${this.value*prices.products}`;
-});
+function processInput(inputElement, summaryElement){
+    inputElement.addEventListener('input', function () {
+        if (inputElement.value) {
+            summaryElement.classList.add('open');
+        }else{
+            summaryElement.classList.remove('open');
+        }
+        prices_calculated[this.id] = this.value * prices[this.id] ;
+        summaryElement.children[1].textContent=`${this.value} * $${prices[this.id]}`;
+        summaryElement.children[2].textContent=`$${prices_calculated[this.id]}`;
+    });
+}
+
+
+processInput(form.products, summary.products);
+processInput(form.orders, summary.orders);
+
