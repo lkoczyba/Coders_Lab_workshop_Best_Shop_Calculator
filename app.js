@@ -72,10 +72,9 @@ function processInput(inputElement) {
 function displayCalculatedPrice(calculatedPrice, summaryElement) {
     if (typeof calculatedPrice[0] === 'number') {
         summaryElement.classList.add('open');
-        summaryElement.children[1].textContent = calculatedPrice[1];
-        if (summaryElement.children[2]) {
-            summaryElement.children[2].textContent = calculatedPrice[2];
-        }
+        calculatedPrice.slice(1,3).forEach((item,index)=>{
+            summaryElement.children[index+1].textContent = calculatedPrice[index+1];
+        });
     } else {
         summaryElement.classList.remove('open');
     }
