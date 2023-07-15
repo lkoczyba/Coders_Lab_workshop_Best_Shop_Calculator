@@ -14,9 +14,10 @@ const summary = {
     package: document.querySelector('[data-id=package]'),
     accounting: document.querySelector('[data-id=accounting]'),
     terminal: document.querySelector('[data-id=terminal]'),
-    totalPrice: document.querySelector('[data-id=total-price]')
+    totalPrice: document.querySelector('#total-price')
 };
 
+//default prices
 const prices = {
     products: 0.5,
     orders: 0.25,
@@ -29,7 +30,8 @@ const prices = {
     terminal: 5
 };
 
-let prices_calculated = {
+//prices calculated [price, amount*price, $+price]
+let pricesCalculated = {
     products: [],
     orders: [],
     package: [],
@@ -38,32 +40,32 @@ let prices_calculated = {
 }
 
 function processInput(inputElement) {
-    inputElement.addEventListener(inputElement.type===undefined ? 'click':'input', function (e) {
+    inputElement.addEventListener(inputElement.type === undefined ? 'click' : 'input', function (e) {
         switch (inputElement.type) {
             case undefined:
                 this.classList.toggle('open');
-                if(e.target.tagName==='LI') {
-                    prices_calculated[this.id][0] = prices[this.id][e.target.getAttribute('data-value')];
-                    prices_calculated[this.id][1] = e.target.getAttribute('data-value');
-                    prices_calculated[this.id][2] = `$${prices[this.id][e.target.getAttribute('data-value')]}`;
+                if (e.target.tagName === 'LI') {
+                    pricesCalculated[this.id][0] = prices[this.id][e.target.getAttribute('data-value')];
+                    pricesCalculated[this.id][1] = e.target.textContent;
+                    pricesCalculated[this.id][2] = `$${prices[this.id][e.target.getAttribute('data-value')]}`;
                 }
                 break;
             case 'checkbox':
                 if (this.checked) {
-                    prices_calculated[this.id][0] = prices[this.id];
-                    prices_calculated[this.id][1] = `$${prices_calculated[this.id][0]}`;
-                }
-                else {
-                    prices_calculated[this.id]=[];
+                    pricesCalculated[this.id][0] = prices[this.id];
+                    pricesCalculated[this.id][1] = `$${pricesCalculated[this.id][0]}`;
+                } else {
+                    pricesCalculated[this.id] = [];
                 }
                 break;
             case 'number':
-                prices_calculated[this.id][0] = this.value * prices[this.id];
-                prices_calculated[this.id][1] = `${this.value} * $${prices[this.id]}`;
-                prices_calculated[this.id][2] = `$${prices_calculated[this.id][0]}`;
+                pricesCalculated[this.id][0] = this.value * prices[this.id];
+                pricesCalculated[this.id][1] = `${this.value} * $${prices[this.id]}`;
+                pricesCalculated[this.id][2] = `$${pricesCalculated[this.id][0]}`;
                 break;
         }
-        displayCalculatedPrice(prices_calculated[this.id],summary[this.id]);
+        displayCalculatedPrice(pricesCalculated[this.id], summary[this.id]);
+        displayTotalPrice(pricesCalculated,summary.totalPrice);
     });
 }
 
@@ -71,18 +73,18 @@ function displayCalculatedPrice(calculatedPrice, summaryElement) {
     if (typeof calculatedPrice[0] === 'number') {
         summaryElement.classList.add('open');
         summaryElement.children[1].textContent = calculatedPrice[1];
-        if(summaryElement.children[2]) {
+        if (summaryElement.children[2]) {
             summaryElement.children[2].textContent = calculatedPrice[2];
         }
     } else {
         summaryElement.classList.remove('open');
     }
-
 }
 
-processInput(form.products);
-processInput(form.orders);
-processInput(form.package);
-processInput(form.accounting);
-processInput(form.terminal);
+function displayTotalPrice(calculatedPrice, summaryElement) {
+    summaryElement.children[1].textContent='$'+ Object.values(calculatedPrice).flat().filter(item=>typeof item==='number').reduce((total,item)=>total+item,0);
+}
 
+Object.keys(form).forEach(key => {
+    processInput(form[key]);
+});
