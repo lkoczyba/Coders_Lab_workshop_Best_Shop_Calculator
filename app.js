@@ -30,50 +30,55 @@ const prices = {
     terminal: 5
 };
 
-//prices calculated [price, amount*price, $+price]
+//prices calculated
 let pricesCalculated = {
-    products: [],
-    orders: [],
-    package: [],
-    accounting: [],
-    terminal: []
+    products: 0,
+    orders: 0,
+    package: 0,
+    accounting: 0,
+    terminal: 0
 }
 
 function processInput(inputElement) {
     inputElement.addEventListener(inputElement.type === undefined ? 'click' : 'input', function (e) {
+        let displayArray = [];
         switch (inputElement.type) {
             case undefined:
                 this.classList.toggle('open');
                 if (e.target.tagName === 'LI') {
-                    pricesCalculated[this.id][0] = prices[this.id][e.target.getAttribute('data-value')];
-                    pricesCalculated[this.id][1] = e.target.textContent;
-                    pricesCalculated[this.id][2] = `$${prices[this.id][e.target.getAttribute('data-value')]}`;
+                    pricesCalculated[this.id] = prices[this.id][e.target.getAttribute('data-value')];
+                    displayArray[0] = e.target.textContent;
+                    displayArray[1] = `$${pricesCalculated[this.id]}`;
                 }
                 break;
             case 'checkbox':
                 if (this.checked) {
-                    pricesCalculated[this.id][0] = prices[this.id];
-                    pricesCalculated[this.id][1] = `$${pricesCalculated[this.id][0]}`;
+                    pricesCalculated[this.id] = prices[this.id];
+                    displayArray[0] = `$${pricesCalculated[this.id]}`;
                 } else {
-                    pricesCalculated[this.id] = [];
+                    pricesCalculated[this.id] = 0;
                 }
                 break;
             case 'number':
-                pricesCalculated[this.id][0] = this.value * prices[this.id];
-                pricesCalculated[this.id][1] = `${this.value} * $${prices[this.id]}`;
-                pricesCalculated[this.id][2] = `$${pricesCalculated[this.id][0]}`;
+                if (this.checkValidity()) {
+                    pricesCalculated[this.id] = this.value * prices[this.id];
+                    displayArray[0] = `${this.value} * $${prices[this.id]}`;
+                    displayArray[1] = `$${pricesCalculated[this.id]}`;
+                }else{
+                    alert('Value must be greater than zero and be an integer');
+                }
                 break;
         }
-        displayCalculatedPrice(pricesCalculated[this.id], summary[this.id]);
+        displayCalculatedPrice(displayArray, summary[this.id]);
         displayTotalPrice(pricesCalculated,summary.totalPrice);
     });
 }
 
-function displayCalculatedPrice(calculatedPrice, summaryElement) {
-    if (typeof calculatedPrice[0] === 'number') {
+function displayCalculatedPrice(displayArray, summaryElement) {
+    if (displayArray.length>0) {
         summaryElement.classList.add('open');
-        calculatedPrice.slice(1,3).forEach((item,index)=>{
-            summaryElement.children[index+1].textContent = calculatedPrice[index+1];
+        displayArray.forEach((item,index)=>{
+            summaryElement.children[index+1].textContent = displayArray[index];
         });
     } else {
         summaryElement.classList.remove('open');
@@ -81,7 +86,7 @@ function displayCalculatedPrice(calculatedPrice, summaryElement) {
 }
 
 function displayTotalPrice(calculatedPrice, summaryElement) {
-    summaryElement.children[1].textContent='$'+ Object.values(calculatedPrice).flat().filter(item=>typeof item==='number').reduce((total,item)=>total+item,0);
+    summaryElement.children[1].textContent='$'+ Object.values(calculatedPrice).reduce((total,item)=>total+item,0);
 }
 
 Object.keys(form).forEach(key => {
