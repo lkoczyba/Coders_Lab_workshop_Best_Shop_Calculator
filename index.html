@@ -15,10 +15,12 @@
     <div class="calc__columns">
         <form class="calc__form">
             <div class="calc__input">
-                <input type="number" class="form__input" id="products" min="1" step="1" placeholder="Products quantity"/>
+                <input type="number" class="form__input" id="products" min="1" step="1"
+                       placeholder="Products quantity"/>
             </div>
             <div class="calc__input">
-                <input type="number" class="form__input" id="orders" min="1" step="1" placeholder="Estimated orders in month"/>
+                <input type="number" class="form__input" id="orders" min="1" step="1"
+                       placeholder="Estimated orders in month"/>
             </div>
             <div class="calc__select" id="package" data-value="">
                 <div class="select__input">
@@ -31,16 +33,17 @@
                     <li data-value="premium">Premium</li>
                 </ul>
             </div>
-            <label class="form__checkbox">
-                <input type="checkbox" id="accounting"/>
-                <span class="checkbox"></span>
-                <p class="consent__text">Accounting</p>
-            </label>
-            <label class="form__checkbox">
-                <input type="checkbox" id="terminal"/>
-                <span class="checkbox"></span>
-                <p class="consent__text">Rental of a payment terminal</p>
-            </label>
+
+            <div class="checkbox">
+                <input class="checkbox__input" type="checkbox" id="accounting">
+                <label for="accounting" class="checkbox__label">Accounting</label>
+            </div>
+            <div class="checkbox">
+                <input class="checkbox__input" type="checkbox" id="terminal">
+                <label for="terminal" class="checkbox__label">Terminal</label>
+            </div>
+
+
         </form>
 
         <div class="calc__summary">
